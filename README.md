@@ -1,2 +1,4 @@
 # Web-Programming
-Repository for laboratory exercises at Faculty of Computer Science and Engineering - Skopje
+
+Subject: Web Programming
+Repository for the laboratory exercises at Faculty of Computer Science and Engineering - Skopje
