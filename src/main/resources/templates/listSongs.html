@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Songs Homepage - Welcome to My Music Store</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to My Music Store</h1>
+</header>
+<main>
+    <h2>Choose a song:</h2>
+    <!-- Display radio buttons for each song,
+            the value should be the trackId
+            and the displayed text should be Title: <songTitle>, Genre:<genre>, Release Year: <releaseYear> -->
+    <form th:method="POST" th:action="@{/artist}">
+
+        <div th:each="song : ${songList}">
+            Title: <th:block th:text="${song.getTitle()}"></th:block><br>
+            Genre: <th:block th:text="${song.getGenre()}"></th:block><br>
+            Release Year: <th:block th:text="${song.getReleaseYear()}"></th:block><br>
+            <input type="radio" name="songRadio"  th:value="${song.trackId}">
+            <br/>
+            <br/>
+        </div>
+        <input type='submit' value='Submit'>
+    </form>
+
+</main>
+</body>
+</html>
