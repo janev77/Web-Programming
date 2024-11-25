@@ -1,12 +1,10 @@
 package mk.ukim.finki.wp.lab1.model;
 
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Data
 public class Song {
 

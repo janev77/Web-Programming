@@ -1,9 +1,7 @@
 package mk.ukim.finki.wp.lab1.model;
 
 import lombok.Data;
-import lombok.Getter;
 
-@Getter
 @Data
 public class Artist {
 
@@ -18,5 +16,4 @@ public class Artist {
         this.lastName = lastName;
         this.bio = bio;
     }
-
 }

@@ -1,4 +1,4 @@
-package mk.ukim.finki.lab1;
+package mk.ukim.finki.wp.lab1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
