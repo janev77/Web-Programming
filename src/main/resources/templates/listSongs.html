@@ -12,6 +12,15 @@
 <body>
 <header>
     <h1>Welcome to My Music Store</h1>
+
+    <form th:action="@{/song/song-list}" th:method="get">
+        <input type="text" th:name="search">
+        <input type="submit" value="Search"></input>
+    </form>
+
+
+
+
 </header>
 <main>
     <h2>Choose a song:</h2>
@@ -24,7 +33,7 @@
             Title: <th:block th:text="${song.getTitle()}"></th:block><br>
             Genre: <th:block th:text="${song.getGenre()}"></th:block><br>
             Release Year: <th:block th:text="${song.getReleaseYear()}"></th:block><br>
-            <input type="radio" name="songRadio"  th:value="${song.trackId}">
+            <input type="radio" name="songRadio"  th:value="${song.getTrackId()}">
             <br/>
             <br/>
         </div>

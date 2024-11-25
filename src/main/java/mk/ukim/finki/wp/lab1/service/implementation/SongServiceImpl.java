@@ -27,6 +27,12 @@ public class SongServiceImpl implements SongService {
         return songRepository.addArtistToSong(artist, song);
     }
 
+
+    @Override
+    public List<Song> findByTitle(String title) {
+        return songRepository.findByTitle(title);
+    }
+
     @Override
     public Song findByTrackId(String trackId) {
         return songRepository.findByTrackId(trackId);
