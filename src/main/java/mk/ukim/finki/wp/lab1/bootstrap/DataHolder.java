@@ -36,10 +36,10 @@ public class DataHolder {
 
 
         songsList = new ArrayList<>();
-        songsList.add(new Song("100001","Die with a smile", "HipHop", 2024,albumList.get(0)));
-        songsList.add(new Song("100002","The Door", "HipHop", 2023,albumList.get(1)));
-        songsList.add(new Song("200003", "Midnight Roads", "Rock", 2024,albumList.get(2)));
-        songsList.add(new Song("200004", "Skyline Symphony", "HipHop", 2023,albumList.get(3)));
-        songsList.add(new Song("200005", "Golden Horizon", "Alternative", 2024,albumList.get(4)));
+        songsList.add(new Song("Die with a smile", "HipHop", 2024,albumList.get(0)));
+        songsList.add(new Song("The Door", "HipHop", 2023,albumList.get(1)));
+        songsList.add(new Song("Midnight Roads", "Rock", 2024,albumList.get(2)));
+        songsList.add(new Song("Skyline Symphony", "HipHop", 2023,albumList.get(3)));
+        songsList.add(new Song("Golden Horizon", "Alternative", 2024,albumList.get(4)));
     }
 }

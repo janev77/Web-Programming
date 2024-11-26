@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -32,11 +31,10 @@ public class SongRepository {
         return artist;
     }
 
-    public Optional<Song> save(String trackId, String title, String genre, int releaseYear, Album album){
-        Song song = new Song(trackId, title, genre, releaseYear, album);
+    public void save(String title, String genre, int releaseYear, Album album){
+        Song song = new Song(title, genre, releaseYear, album);
         DataHolder.songsList.removeIf(s -> Objects.equals(s.getTitle(), title));
         DataHolder.songsList.add(song);
-        return Optional.of(song);
     }
 
     public void deleteById(String id) {

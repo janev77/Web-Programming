@@ -5,7 +5,6 @@ import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SongService {
     List<Song> listSongs();
@@ -15,7 +14,7 @@ public interface SongService {
 
     Song findByTrackId(String trackId);
 
-    public Optional<Song> save(String trackId, String title, String genre, Integer releaseYear, Album album);
+    public void save(String title, String genre, Integer releaseYear, Album album);
 
     void deleteById(String id);
 }

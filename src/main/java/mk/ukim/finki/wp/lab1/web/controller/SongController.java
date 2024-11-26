@@ -65,28 +65,25 @@ public class SongController {
 
         Album album = albumService.findById(albumId).orElseThrow(() -> new RuntimeException(String.valueOf(albumId)));
 
-        if(trackId == null){
-            this.songService.save(trackId, title, genre, releaseYear, album);
+        if(trackId == null || trackId.isEmpty()){
+            this.songService.save(title, genre, releaseYear, album);
             return "redirect:/songs";
         }
+        else{
+            Song song = songService.findByTrackId(trackId);
 
-        Song song = songService.findByTrackId(trackId);
+            song.setTitle(title);
+            song.setGenre(genre);
+            song.setReleaseYear(releaseYear);
+            song.setAlbum(album);
+        }
 
-        song.setTitle(title);
-        song.setGenre(genre);
-        song.setReleaseYear(releaseYear);
-        song.setAlbum(albumService.findById(albumId).orElseThrow(() -> new RuntimeException(String.valueOf(albumId))));
-        return "redirect:/songs";
-    }
-
-    @GetMapping("/songs/delete/{id}")
-    public String deleteSong(@PathVariable String id){
-        songService.deleteById(id);
         return "redirect:/songs";
     }
 
     @GetMapping("/songs/edit-form/{id}")
     public String getEditSongForm(@PathVariable String id, Model model){
+
         Song song = songService.findByTrackId(id);
         List<Artist> artists = artistService.listArtists();
         List<Album> albums = albumService.findAll();
@@ -98,10 +95,11 @@ public class SongController {
 
     @GetMapping("/songs/edit/{songId}")
     public String editSong(@PathVariable String songId,
-                           @RequestParam(value = "title",required = false) String title,
-                           @RequestParam(value = "genre",required = false) String genre,
-                           @RequestParam(value = "releaseYear",required = false) int releaseYear,
-                           @RequestParam(value = "albumId",required = false) Long albumId){
+                           @RequestParam(value = "title") String title,
+                           @RequestParam(value = "genre") String genre,
+                           @RequestParam(value = "releaseYear") int releaseYear,
+                           @RequestParam(value = "albumId") Long albumId){
+
         Song song = this.songService.findByTrackId(songId);
         song.setTitle(title);
         song.setGenre(genre);
@@ -109,4 +107,12 @@ public class SongController {
         song.setAlbum(albumService.findById(albumId).orElseThrow(() -> new IllegalArgumentException("Album not found")));
         return "redirect:/songs";
     }
+
+    @GetMapping("/songs/delete/{id}")
+    public String deleteSong(@PathVariable String id){
+
+        songService.deleteById(id);
+        return "redirect:/songs";
+    }
+
 }
