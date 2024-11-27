@@ -23,6 +23,7 @@ public class Song {
         this.releaseYear = releaseYear;
         performers = new ArrayList<>();
         this.album = album;
+        this.counter = 0;
     }
 
     public void addPerformer(Artist performer) {

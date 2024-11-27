@@ -48,4 +48,8 @@ public class SongServiceImpl implements SongService {
         this.songRepository.deleteById(id);
     }
 
+    public int counter(String id) {
+        return songRepository.counter(id);
+    }
+
 }

@@ -18,5 +18,5 @@ public interface SongService {
 
     void deleteById(String id);
 
-    //int counter();
+    int  counter(String id);
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SongDetailsController {
     private final SongServiceImpl songService;
     private final ArtistServiceImpl artistService;
-    int counter = 0;
+    //int counter = 0;
 
 
     public SongDetailsController(SongServiceImpl songService, ArtistServiceImpl artistService) {
@@ -48,9 +48,10 @@ public class SongDetailsController {
                 s.addPerformer(a);
             }
         }
-        counter++;
-        model.addAttribute("song",s);
-        model.addAttribute("count",counter);
+
+        int counter = songService.counter(trackId);
+        model.addAttribute("song", s);
+        model.addAttribute("count", counter);
 
         return "songDetails";
     }
