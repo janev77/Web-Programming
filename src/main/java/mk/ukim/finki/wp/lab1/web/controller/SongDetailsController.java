@@ -7,17 +7,14 @@ import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/song/song-details")
 public class SongDetailsController {
     private final SongServiceImpl songService;
     private final ArtistServiceImpl artistService;
-
+    int counter = 0;
 
     public SongDetailsController(SongServiceImpl songService, ArtistServiceImpl artistService) {
         this.songService = songService;
@@ -30,6 +27,7 @@ public class SongDetailsController {
         Song s = songService.listSongs().stream().findFirst().orElse(null);
 
         model.addAttribute("song",s);
+
         return "songDetails";
     }
 
@@ -48,7 +46,9 @@ public class SongDetailsController {
             }
         }
 
+        counter++;
         model.addAttribute("song",s);
+        model.addAttribute("count", counter);
 
         return "songDetails";
     }

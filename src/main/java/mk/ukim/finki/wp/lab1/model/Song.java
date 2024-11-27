@@ -9,6 +9,7 @@ import java.util.List;
 public class Song {
 
     String trackId;
+    int counter;
     String title;
     String genre;
     int releaseYear;

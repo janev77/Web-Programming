@@ -17,4 +17,6 @@ public interface SongService {
     public void save(String title, String genre, Integer releaseYear, Album album);
 
     void deleteById(String id);
+
+    //int counter();
 }
