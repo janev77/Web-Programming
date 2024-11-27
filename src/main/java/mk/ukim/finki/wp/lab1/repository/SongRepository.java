@@ -6,8 +6,6 @@ import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -48,6 +46,16 @@ public class SongRepository {
         int count = findByTrackId(id).getCounter();
         findByTrackId(id).setCounter(++count);
         return count;
+
+
+//        return DataHolder.songsList.stream()
+//                .filter(s -> s.getTrackId().equals(trackId))
+//                .findFirst()
+//                .map(song -> {
+//                    song.setCounter(song.getCounter() + 1);
+//                    return song.getCounter(); // Return the updated counter
+//                })
+//                .orElse(0);
 
     }
 }
