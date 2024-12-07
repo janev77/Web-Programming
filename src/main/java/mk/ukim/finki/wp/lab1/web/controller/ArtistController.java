@@ -36,7 +36,7 @@ public class ArtistController {
             songRadio = "?";
         }
 
-        model.addAttribute("trackId", songRadio);
+        model.addAttribute("id", songRadio);
         model.addAttribute("artistList", artistList);
         return "artistsList";
     }

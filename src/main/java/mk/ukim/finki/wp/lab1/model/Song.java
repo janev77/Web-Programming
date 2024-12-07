@@ -1,23 +1,30 @@
 package mk.ukim.finki.wp.lab1.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Entity
 @Data
 public class Song {
 
-    String trackId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     int counter;
     String title;
     String genre;
     int releaseYear;
-    List<Artist> performers;
+    @ManyToMany
+    private List<Artist> performers = new ArrayList<>();
+    @ManyToOne
     private Album album;
 
+    public Song() {}
+
     public Song(String title, String genre, int releaseYear, Album album) {
-        this.trackId = String.valueOf((long) (Math.random()*1000));
+        //this.trackId = String.valueOf((long) (Math.random()*1000));
         this.title = title;
         this.genre = genre;
         this.releaseYear = releaseYear;
@@ -26,8 +33,8 @@ public class Song {
         this.counter = 0;
     }
 
+
     public void addPerformer(Artist performer) {
         performers.add(performer);
     }
-
 }

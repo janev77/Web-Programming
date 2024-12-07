@@ -8,15 +8,18 @@ import java.util.List;
 
 public interface SongService {
     List<Song> listSongs();
+
     Artist addArtistToSong(Artist artist, Song song);
 
     List<Song> findByTitle(String title);
 
-    Song findByTrackId(String trackId);
+    Song findById(Long id);
 
-    public void save(String title, String genre, Integer releaseYear, Album album);
+    void save(String title, String genre, Integer releaseYear, Album album);
 
-    void deleteById(String id);
+    void deleteById(Long id);
 
-    int  counter(String id);
+    int counter(Long id);
+
+    void save(Song song);
 }

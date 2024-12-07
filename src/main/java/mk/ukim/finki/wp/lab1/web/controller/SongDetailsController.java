@@ -3,6 +3,8 @@ package mk.ukim.finki.wp.lab1.web.controller;
 
 import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
+import mk.ukim.finki.wp.lab1.service.ArtistService;
+import mk.ukim.finki.wp.lab1.service.SongService;
 import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
 import org.springframework.stereotype.Controller;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/song/song-details")
 public class SongDetailsController {
-    private final SongServiceImpl songService;
-    private final ArtistServiceImpl artistService;
+    private final SongService songService;
+    private final ArtistService artistService;
     //int counter = 0;
 
 
@@ -26,7 +28,7 @@ public class SongDetailsController {
     }
 
     @GetMapping
-    public String showSongDetails(@RequestParam(value = "", required = false) Model model) {
+    public String showSongDetails(@RequestParam(required = false) Model model) {
 
         Song s = songService.listSongs().stream().findFirst().orElse(null);
 
@@ -35,13 +37,13 @@ public class SongDetailsController {
     }
 
     @PostMapping
-    public String saveSongDetails(@RequestParam(value = "trackId", required = false) String trackId,
+    public String saveSongDetails(@RequestParam(value = "id", required = false) Long id,
                                   @RequestParam(value = "artistId", required = false) String artistId,
                                   Model model) {
         Song s = songService.listSongs().stream().findFirst().orElse(null);
 
-        if (trackId != null && !trackId.isEmpty() && artistId != null && !artistId.isEmpty()) {
-            s = songService.findByTrackId(trackId);
+        if (id != null && artistId != null) {
+            s = songService.findById(id);
             Artist a = artistService.findById(Long.valueOf(artistId));
 
             if (!s.getPerformers().contains(a)){
@@ -49,7 +51,7 @@ public class SongDetailsController {
             }
         }
 
-        int counter = songService.counter(trackId);
+        int counter = songService.counter(id);
         model.addAttribute("song", s);
         model.addAttribute("count", counter);
 

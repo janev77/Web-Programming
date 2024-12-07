@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.lab1.service.implementation;
 
 import mk.ukim.finki.wp.lab1.model.Artist;
-import mk.ukim.finki.wp.lab1.repository.ArtistRepository;
+import mk.ukim.finki.wp.lab1.repository.jpa.ArtistRepository;
 import mk.ukim.finki.wp.lab1.service.ArtistService;
 import org.springframework.stereotype.Service;
 

@@ -3,6 +3,9 @@ package mk.ukim.finki.wp.lab1.web.controller;
 import mk.ukim.finki.wp.lab1.model.Album;
 import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
+import mk.ukim.finki.wp.lab1.service.AlbumService;
+import mk.ukim.finki.wp.lab1.service.ArtistService;
+import mk.ukim.finki.wp.lab1.service.SongService;
 import mk.ukim.finki.wp.lab1.service.implementation.AlbumServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
@@ -18,11 +21,11 @@ import java.util.List;
 @Controller
 public class SongController {
 
-    private final SongServiceImpl songService;
-    private final AlbumServiceImpl albumService;
-    private final ArtistServiceImpl artistService;
+    private final SongService songService;
+    private final AlbumService albumService;
+    private final ArtistService artistService;
 
-    public SongController(SongServiceImpl songService, AlbumServiceImpl albumService, ArtistServiceImpl artistService) {
+    public SongController(SongService songService, AlbumService albumService, ArtistService artistService) {
         this.songService = songService;
         this.albumService = albumService;
         this.artistService = artistService;
@@ -57,59 +60,80 @@ public class SongController {
 
 
     @PostMapping("/songs/add")
-    public String saveSong(@RequestParam(value = "trackId",required = false) String trackId,
-                           @RequestParam(value = "title", required = false) String title,
-                           @RequestParam(value = "genre",required = false) String genre,
-                           @RequestParam(value = "releaseYear",required = false) int releaseYear,
-                           @RequestParam(value = "albumId",required = false) Long albumId){
+    public String saveSong(@RequestParam(value = "id", required = false) Long id,
+                           @RequestParam(value = "title") String title,
+                           @RequestParam(value = "genre") String genre,
+                           @RequestParam(value = "releaseYear") int releaseYear,
+                           @RequestParam(value = "albumId") Long albumId) {
 
-        Album album = albumService.findById(albumId).orElseThrow(() -> new RuntimeException(String.valueOf(albumId)));
+        Album album = albumService.findById(albumId)
+                .orElseThrow(() -> new RuntimeException("Album with ID " + albumId + " not found"));
 
-        if(trackId == null || trackId.isEmpty()){
+        if (id == null) {
+            // Add a new song
             this.songService.save(title, genre, releaseYear, album);
-            return "redirect:/songs";
         }
-        else{
-            Song song = songService.findByTrackId(trackId);
+        else {
+            // Edit existing song
+            Song song = songService.findById(id);
+            if (song != null) {
+                song.setTitle(title);
+                song.setGenre(genre);
+                song.setReleaseYear(releaseYear);
+                song.setAlbum(album);
 
-            song.setTitle(title);
-            song.setGenre(genre);
-            song.setReleaseYear(releaseYear);
-            song.setAlbum(album);
+                songService.save(song);
+            }
+            else {
+                throw new RuntimeException("Song with ID " + id + " not found");
+            }
         }
 
         return "redirect:/songs";
     }
 
-    @GetMapping("/songs/edit-form/{id}")
-    public String getEditSongForm(@PathVariable String id, Model model){
+    @PostMapping("/songs/edit/{songId}")
+    public String editSong(@PathVariable Long songId,
+                           @RequestParam(value = "title") String title,
+                           @RequestParam(value = "genre") String genre,
+                           @RequestParam(value = "releaseYear") int releaseYear,
+                           @RequestParam(value = "albumId") Long albumId) {
 
-        Song song = songService.findByTrackId(id);
+        Song song = songService.findById(songId);
+        if (song != null) {
+            song.setTitle(title);
+            song.setGenre(genre);
+            song.setReleaseYear(releaseYear);
+            Album album = albumService.findById(albumId)
+                    .orElseThrow(() -> new IllegalArgumentException("Album not found"));
+            song.setAlbum(album);
+
+            songService.save(song);
+        }
+        else {
+            throw new RuntimeException("Song not found");
+        }
+
+        return "redirect:/songs";
+    }
+
+
+    @GetMapping("/songs/edit-form/{id}")
+    public String getEditSongForm(@PathVariable Long id, Model model){
+
+        Song song = songService.findById(id);
+
         List<Artist> artists = artistService.listArtists();
         List<Album> albums = albumService.findAll();
+
         model.addAttribute("song", song);
         model.addAttribute("artists", artists);
         model.addAttribute("albums", albums);
         return "add-song";
     }
 
-    @GetMapping("/songs/edit/{songId}")
-    public String editSong(@PathVariable String songId,
-                           @RequestParam(value = "title") String title,
-                           @RequestParam(value = "genre") String genre,
-                           @RequestParam(value = "releaseYear") int releaseYear,
-                           @RequestParam(value = "albumId") Long albumId){
-
-        Song song = this.songService.findByTrackId(songId);
-        song.setTitle(title);
-        song.setGenre(genre);
-        song.setReleaseYear(releaseYear);
-        song.setAlbum(albumService.findById(albumId).orElseThrow(() -> new IllegalArgumentException("Album not found")));
-        return "redirect:/songs";
-    }
-
     @GetMapping("/songs/delete/{id}")
-    public String deleteSong(@PathVariable String id){
+    public String deleteSong(@PathVariable Long id){
 
         songService.deleteById(id);
         return "redirect:/songs";

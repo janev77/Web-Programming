@@ -30,14 +30,14 @@
             Genre: <th:block th:text="${song.getGenre()}"></th:block><br>
             Release Year: <th:block th:text="${song.getReleaseYear()}"></th:block><br>
 
-            <input type="radio" name="songRadio"  th:value="${song.getTrackId()}">
+            <input type="radio" name="songRadio"  th:value="${song.getId()}">
 
 
-            <a th:href="@{/songs/edit-form/{id}(id=${song.trackId})}">
+            <a th:href="@{/songs/edit-form/{id}(id=${song.id})}">
                 <button type="button">Edit song</button>
             </a>
 
-            <a th:href="@{/songs/delete/{id}(id=${song.trackId})}">
+            <a th:href="@{/songs/delete/{id}(id=${song.id})}">
                 <button type="button">Delete song</button>
             </a>
 
