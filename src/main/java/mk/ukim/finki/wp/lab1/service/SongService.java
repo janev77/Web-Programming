@@ -23,5 +23,5 @@ public interface SongService {
 
     void save(Song song);
 
-    void comments(String text, Long id);
+    void addCommentToSong(Long songId, String text);
 }

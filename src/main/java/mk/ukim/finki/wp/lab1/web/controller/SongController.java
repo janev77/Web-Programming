@@ -31,7 +31,7 @@ public class SongController {
         this.artistService = artistService;
     }
 
-    @GetMapping("/songs")
+    @GetMapping({"/songs","/"})
     public String getSongsPage(@RequestParam(value = "search", required = false) String search, Model model) {
 
         List<Song> songList;

@@ -21,8 +21,8 @@ public class Song {
     @ManyToOne
     private Album album;
 
-    @ManyToOne
-    List<String> comment = new ArrayList<>();
+    @OneToMany(mappedBy = "song")
+    List<Comment> comment = new ArrayList<>();
 
     public Song() {}
 
@@ -37,12 +37,7 @@ public class Song {
         comment = new ArrayList<>();
     }
 
-
     public void addPerformer(Artist performer) {
         performers.add(performer);
-    }
-
-    public void addComment(String text){
-        comment.add(text);
     }
 }

@@ -2,21 +2,24 @@ package mk.ukim.finki.wp.lab1.service.implementation;
 
 import mk.ukim.finki.wp.lab1.model.Album;
 import mk.ukim.finki.wp.lab1.model.Artist;
+import mk.ukim.finki.wp.lab1.model.Comment;
 import mk.ukim.finki.wp.lab1.model.Song;
+import mk.ukim.finki.wp.lab1.repository.jpa.CommentRepository;
 import mk.ukim.finki.wp.lab1.repository.jpa.SongRepository;
 import mk.ukim.finki.wp.lab1.service.SongService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
+    private final CommentRepository commentRepository;
 
-    public SongServiceImpl(SongRepository songRepository) {
+    public SongServiceImpl(SongRepository songRepository, CommentRepository commentRepository) {
         this.songRepository = songRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -80,12 +83,18 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public void comments(String text, Long id) {
-        Song existingSong = songRepository.getReferenceById(id);
+    public void addCommentToSong(Long songId, String text) {
+        Song song = songRepository.findById(songId).orElseThrow(() -> new IllegalArgumentException("Song not found"));
 
-        existingSong.addComment(text);
-        songRepository.save(existingSong);
+        Comment comment = new Comment();
+        comment.setText(text);
+        comment.setSong(song);
 
+        // Synchronize both sides of the relationship
+        song.getComment().add(comment);
+
+        // Save both entities
+        commentRepository.save(comment);
     }
 
 
