@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.lab1.web.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 import mk.ukim.finki.wp.lab1.service.ArtistService;
@@ -57,4 +58,24 @@ public class SongDetailsController {
 
         return "songDetails";
     }
+    @PostMapping("/add-comment")
+    public String addComment(@RequestParam(value = "id", required = false) Long id,
+                             @RequestParam(value = "comment", required = false) String text,
+                             Model model){
+
+        Song song = songService.findById(id);
+
+        System.out.println("Fleze" + id);
+
+        songService.comments(text,id);
+
+        int counter = songService.counter(id);
+        model.addAttribute("comment", song);
+        model.addAttribute("count", counter);
+        model.addAttribute("song", song);
+
+
+        return "songDetails";
+    }
+
 }

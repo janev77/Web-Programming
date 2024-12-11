@@ -7,6 +7,7 @@ import mk.ukim.finki.wp.lab1.repository.jpa.SongRepository;
 import mk.ukim.finki.wp.lab1.service.SongService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,5 +78,15 @@ public class SongServiceImpl implements SongService {
     public void save(Song song) {
         songRepository.save(song);
     }
+
+    @Override
+    public void comments(String text, Long id) {
+        Song existingSong = songRepository.getReferenceById(id);
+
+        existingSong.addComment(text);
+        songRepository.save(existingSong);
+
+    }
+
 
 }

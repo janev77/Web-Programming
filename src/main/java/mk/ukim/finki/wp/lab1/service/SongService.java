@@ -22,4 +22,6 @@ public interface SongService {
     int counter(Long id);
 
     void save(Song song);
+
+    void comments(String text, Long id);
 }
