@@ -1,81 +1,80 @@
 package mk.ukim.finki.wp.lab1.web.controller;
 
-
-import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 import mk.ukim.finki.wp.lab1.service.ArtistService;
 import mk.ukim.finki.wp.lab1.service.SongService;
-import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
-import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/song/song-details")
 public class SongDetailsController {
+
     private final SongService songService;
     private final ArtistService artistService;
-    //int counter = 0;
 
-
-    public SongDetailsController(SongServiceImpl songService, ArtistServiceImpl artistService) {
+    public SongDetailsController(SongService songService, ArtistService artistService) {
         this.songService = songService;
         this.artistService = artistService;
     }
 
     @GetMapping
-    public String showSongDetails(@RequestParam(required = false) Model model) {
+    public String showSongDetails(@RequestParam(value = "id", required = false) Long id, Model model) {
+        // If no ID is provided, fetch the first song (fallback).
+        Song song = id != null ? songService.findById(id) : songService.listSongs().stream().findFirst().orElse(null);
 
-        Song s = songService.listSongs().stream().findFirst().orElse(null);
+        if (song == null) {
+            model.addAttribute("error", "Song not found!");
+            return null; // Render an error page if no song is found.
+        }
 
-        model.addAttribute("song",s);
+        model.addAttribute("song", song);
+        model.addAttribute("count", songService.counter(song.getId()));
         return "songDetails";
     }
 
     @PostMapping
-    public String saveSongDetails(@RequestParam(value = "id", required = false) Long id,
-                                  @RequestParam(value = "artistId", required = false) String artistId,
+    public String saveSongDetails(@RequestParam(value = "id") Long id,
+                                  @RequestParam(value = "artistId", required = false) Long artistId,
                                   Model model) {
-        Song s = songService.listSongs().stream().findFirst().orElse(null);
+        Song song = songService.findById(id);
 
-        if (id != null && artistId != null) {
-            s = songService.findById(id);
-            Artist a = artistService.findById(Long.valueOf(artistId));
+        if (song == null) {
+            model.addAttribute("error", "Song not found!");
+            return null;
+        }
 
-            if (!s.getPerformers().contains(a)){
-                s.addPerformer(a);
+        if (artistId != null) {
+            Artist artist = artistService.findById(artistId);
+            if (artist == null) {
+                model.addAttribute("error", "Artist not found!");
+                return null;
+            }
+
+            if (!song.getPerformers().contains(artist)) {
+                song.addPerformer(artist);
+                songService.save(song); // Persist the changes
             }
         }
 
-        int counter = songService.counter(id);
-        model.addAttribute("song", s);
-        model.addAttribute("count", counter);
-
+        model.addAttribute("song", song);
+        model.addAttribute("count", songService.counter(song.getId()));
         return "songDetails";
     }
-    @PostMapping("/add-comment")
-    public String addComment(@RequestParam(value = "id", required = false) Long id,
-                             @RequestParam(value = "comment", required = false) String text,
-                             Model model){
 
+    @PostMapping("/add-comment")
+    public String addComment(@RequestParam(value = "id") Long id,
+                             @RequestParam(value = "comment") String text,
+                             Model model) {
         Song song = songService.findById(id);
 
-        System.out.println("Fleze" + id);
+        // Add the comment
+        songService.addCommentToSong(id, text);
 
-        songService.comments(text,id);
-
-        int counter = songService.counter(id);
-        model.addAttribute("comment", song);
-        model.addAttribute("count", counter);
         model.addAttribute("song", song);
-
-
+        model.addAttribute("count", songService.counter(id));
         return "songDetails";
     }
-
 }
