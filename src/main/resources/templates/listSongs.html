@@ -7,6 +7,9 @@
             width: 800px;
             margin: auto;
         }
+        .access-denied{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -17,6 +20,14 @@
         <input type="text" th:name="search">
         <input type="submit" value="Search"></input>
     </form>
+
+    <th:block sec:authorize="isAuthenticated()">
+        <a style="float: right" th:href="@{/logout}"><button>LOGOUT</button></a>
+    </th:block>
+
+    <th:block sec:authorize="!isAuthenticated()">
+        <a style="float: right" th:href="@{/login}"><button>LOGIN</button></a>
+    </th:block>
 
 
 </header>
@@ -30,16 +41,19 @@
             Genre: <th:block th:text="${song.getGenre()}"></th:block><br>
             Release Year: <th:block th:text="${song.getReleaseYear()}"></th:block><br>
 
-            <input type="radio" name="songRadio"  th:value="${song.getId()}">
+            <input type="radio" name="songRadio" th:value="${song.getId()}">
 
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/songs/edit-form/{id}(id=${song.id})}">
+                    <button type="button">Edit song</button>
+                </a>
+            </th:block>
 
-            <a th:href="@{/songs/edit-form/{id}(id=${song.id})}">
-                <button type="button">Edit song</button>
-            </a>
-
-            <a th:href="@{/songs/delete/{id}(id=${song.id})}">
-                <button type="button">Delete song</button>
-            </a>
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/songs/delete/{id}(id=${song.id})}">
+                    <button type="button">Delete song</button>
+                </a>
+            </th:block>
 
             <br/>
             <br/>
@@ -52,10 +66,15 @@
     <br>
     <br>
 
-    <a th:href="@{/songs/add-form}">
-        <button type="button">Add new song</button>
-    </a>
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/songs/add-form}">
+            <button type="button">Add new song</button>
+        </a>
+    </th:block>
 
 </main>
+
+
+
 </body>
 </html>

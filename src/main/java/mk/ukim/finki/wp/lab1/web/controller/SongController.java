@@ -5,10 +5,12 @@ import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 import mk.ukim.finki.wp.lab1.service.AlbumService;
 import mk.ukim.finki.wp.lab1.service.ArtistService;
+import mk.ukim.finki.wp.lab1.service.AuthService;
 import mk.ukim.finki.wp.lab1.service.SongService;
 import mk.ukim.finki.wp.lab1.service.implementation.AlbumServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
 import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
 
 @Controller
 public class SongController {
@@ -45,9 +49,12 @@ public class SongController {
         }
         model.addAttribute("songList", songList);
 
+
+
         return "listSongs";
     }
     @GetMapping("/songs/add-form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addSongPage(Model model) {
 
         List<Album> albumList = albumService.findAll();
@@ -60,6 +67,7 @@ public class SongController {
 
 
     @PostMapping("/songs/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveSong(@RequestParam(value = "id", required = false) Long id,
                            @RequestParam(value = "title") String title,
                            @RequestParam(value = "genre") String genre,
@@ -93,6 +101,7 @@ public class SongController {
     }
 
     @PostMapping("/songs/edit/{songId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editSong(@PathVariable Long songId,
                            @RequestParam(value = "title") String title,
                            @RequestParam(value = "genre") String genre,
@@ -118,7 +127,9 @@ public class SongController {
     }
 
 
+
     @GetMapping("/songs/edit-form/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getEditSongForm(@PathVariable Long id, Model model){
 
         Song song = songService.findById(id);
@@ -132,11 +143,22 @@ public class SongController {
         return "add-song";
     }
 
+
     @GetMapping("/songs/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteSong(@PathVariable Long id){
 
         songService.deleteById(id);
         return "redirect:/songs";
+    }
+
+
+    @GetMapping("/access-denied")
+    public String showAccessDeniedPage(Model model){
+
+        model.addAttribute("bodyContent", "access-denied");
+
+        return "access-denied";
     }
 
 }

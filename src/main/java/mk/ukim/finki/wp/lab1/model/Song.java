@@ -21,7 +21,7 @@ public class Song {
     @ManyToOne
     private Album album;
 
-    @OneToMany(mappedBy = "song")
+    @OneToMany(mappedBy = "song", cascade = CascadeType.REMOVE)
     List<Comment> comment = new ArrayList<>();
 
     public Song() {}
