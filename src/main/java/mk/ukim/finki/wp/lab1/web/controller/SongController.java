@@ -5,11 +5,7 @@ import mk.ukim.finki.wp.lab1.model.Artist;
 import mk.ukim.finki.wp.lab1.model.Song;
 import mk.ukim.finki.wp.lab1.service.AlbumService;
 import mk.ukim.finki.wp.lab1.service.ArtistService;
-import mk.ukim.finki.wp.lab1.service.AuthService;
 import mk.ukim.finki.wp.lab1.service.SongService;
-import mk.ukim.finki.wp.lab1.service.implementation.AlbumServiceImpl;
-import mk.ukim.finki.wp.lab1.service.implementation.ArtistServiceImpl;
-import mk.ukim.finki.wp.lab1.service.implementation.SongServiceImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-
-import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
 
 @Controller
 public class SongController {

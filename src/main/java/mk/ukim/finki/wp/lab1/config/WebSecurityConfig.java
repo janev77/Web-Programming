@@ -3,7 +3,6 @@ package mk.ukim.finki.wp.lab1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,16 +31,16 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/songs", "/artist", "/song/song-details", "/song/song-details/add-comment")
+                        .requestMatchers("/", "/songs", "/access-denied", "/artist", "/song/song-details", "/song/song-details/add-comment")
                         .permitAll()
-                        .requestMatchers("/songs/add-form", "/songs/edit-form/**", "/songs/delete/**","/songs/edit/**")
+                        .requestMatchers("/**")
                         .hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
+                //.httpBasic(Customizer.withDefaults())
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        //.loginPage("/login") //custom login
                         .permitAll()
                         .failureUrl("/login?error=BadCredentials")
                         .defaultSuccessUrl("/songs",true)
